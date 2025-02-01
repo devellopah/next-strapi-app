@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/custom/hero-section";
+import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
 
 const homePageQuery = qs.stringify({
@@ -14,17 +15,26 @@ const homePageQuery = qs.stringify({
               populate: true
             }
           }
-        }
+        },
+        "layout.features-section": {
+          populate: {
+            feature: {
+              populate: true,
+            },
+          },
+        },
       }
     }
   },
 });
 
 async function getStrapiData(path: string) {
-  const baseUrl = "http://localhost:1337";
+  const baseUrl = getStrapiURL()
 
   const url = new URL(path, baseUrl);
   url.search = homePageQuery;
+
+  console.log(url.href);
 
   try {
     const response = await fetch(url.href);
